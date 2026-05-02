@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: register-app
-          image: khaledelnabawy1/register-app-pipeline:latest
+          image: khaledelnabawy1/register-app-pipeline:1.0.0-7
           imagePullPolicy: Always
           resources:
             limits:
