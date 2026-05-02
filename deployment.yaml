@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: register-app-deployment
   annotations:
-    build-number: "5"
+    build-number: "6"
 spec:
   replicas: 2
   selector:
@@ -14,7 +14,7 @@ spec:
       labels:
         app: register-app
       annotations:
-        build-number: "5"
+        build-number: "6"
     spec:
       containers:
         - name: register-app
