@@ -27,7 +27,12 @@ pipeline {
         stage("Update the Deployment Tags") {
             steps {
                 sh """
+                   echo "Before update:"
+                   cat deployment.yaml
+
                    sed -i 's|image:.*|image: ${DOCKER_USER}/${APP_NAME}:${IMAGE_TAG}|g' deployment.yaml
+
+                   echo "After update:"
                    cat deployment.yaml
                 """
             }
@@ -38,8 +43,10 @@ pipeline {
                 sh """
                    git config --global user.name "khaledelnabawy1"
                    git config --global user.email "khaledelnabawy@gmail.com"
+
                    git add deployment.yaml
-                   git commit -m "Updated Deployment Manifest"
+
+                   git commit -m "Updated Deployment Manifest to ${IMAGE_TAG}" || echo "No changes to commit"
                 """
                 withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
                     sh "git push https://github.com/Khaled-elnabawy/gitops-register-app main"
