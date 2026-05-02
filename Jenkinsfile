@@ -4,7 +4,8 @@ pipeline {
     environment {
         APP_NAME = "register-app-pipeline"
         DOCKER_USER = "khaledelnabawy1"
-        IMAGE_TAG = "${BUILD_NUMBER}"
+        RELEASE = "1.0.0"
+        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
     }
 
     stages {
@@ -17,7 +18,9 @@ pipeline {
 
         stage("Checkout from SCM") {
             steps {
-                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Khaled-elnabawy/gitops-register-app'
+                git branch: 'main',
+                credentialsId: 'github',
+                url: 'https://github.com/Khaled-elnabawy/gitops-register-app'
             }
         }
 
