@@ -1,11 +1,13 @@
 pipeline {
     agent { label "Jenkins-agent" }
 
+    parameters {
+        string(name: 'IMAGE_TAG', defaultValue: '', description: 'Image tag from CI pipeline')
+    }
+
     environment {
         APP_NAME = "register-app-pipeline"
         DOCKER_USER = "khaledelnabawy1"
-        RELEASE = "1.0.0"
-        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
     }
 
     stages {
