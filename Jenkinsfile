@@ -1,10 +1,6 @@
 pipeline {
     agent { label "Jenkins-agent" }
 
-    parameters {
-        string(name: 'IMAGE_TAG', defaultValue: '', description: 'Image tag from CI pipeline')
-    }
-
     environment {
         APP_NAME = "register-app-pipeline"
         DOCKER_USER = "khaledelnabawy1"
@@ -32,7 +28,11 @@ pipeline {
                    echo "Before update:"
                    cat deployment.yaml
 
-                   sed -i 's|image:.*|image: ${DOCKER_USER}/${APP_NAME}:${IMAGE_TAG}|g' deployment.yaml
+                   # Ensure image is always set to latest
+                   sed -i 's|image:.*|image: ${DOCKER_USER}/${APP_NAME}:latest|g' deployment.yaml
+
+                   # Update the build annotation so ArgoCD detects a real change in git
+                   sed -i 's|build-number:.*|build-number: "${BUILD_NUMBER}"|g' deployment.yaml
 
                    echo "After update:"
                    cat deployment.yaml
@@ -48,7 +48,7 @@ pipeline {
 
                    git add deployment.yaml
 
-                   git commit -m "Updated Deployment Manifest to ${IMAGE_TAG}" || echo "No changes to commit"
+                   git commit -m "Updated Deployment Manifest - Build #${BUILD_NUMBER}" || echo "No changes to commit"
                 """
                 withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
                     sh "git push https://github.com/Khaled-elnabawy/gitops-register-app main"
