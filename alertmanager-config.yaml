@@ -9,7 +9,7 @@ stringData:
       smtp_smarthost: 'smtp.gmail.com:587'
       smtp_from: 'khaledelnabawy457@gmail.com'
       smtp_auth_username: 'khaledelnabawy457@gmail.com'
-      smtp_auth_password: 'ebpv poqa kfhb vupj'
+      smtp_auth_password: 'password'
       smtp_require_tls: true
 
     route:
