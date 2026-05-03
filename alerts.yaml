@@ -2,40 +2,41 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: register-app-alerts
+  namespace: default
   labels:
     app: register-app
-    release: prometheus
+    release: kube-prometheus-stack
 spec:
   groups:
     - name: register-app-alerts
       rules:
 
-        # Alert when all pods are down
+        # This alert ALWAYS fires — just to prove alerts are working
+        - alert: RegisterAppTestAlert
+          expr: vector(1)
+          for: 10s
+          labels:
+            severity: info
+          annotations:
+            summary: "Test Alert - Register App monitoring is active"
+            description: "This is a test alert to confirm alerting pipeline works."
+
+        # Fires when ALL pods are down
         - alert: RegisterAppDown
           expr: kube_deployment_status_replicas_available{deployment="register-app-deployment"} == 0
-          for: 1m
+          for: 30s
           labels:
             severity: critical
           annotations:
             summary: "Register App is DOWN"
-            description: "No available replicas for more than 1 minute."
+            description: "No running pods for register-app-deployment."
 
-        # Alert when a pod keeps restarting
-        - alert: RegisterAppCrashLooping
-          expr: rate(kube_pod_container_status_restarts_total{pod=~"register-app-deployment-.*"}[10m]) > 0
-          for: 5m
+        # Fires when pods keep restarting
+        - alert: RegisterAppRestarting
+          expr: increase(kube_pod_container_status_restarts_total{pod=~"register-app-deployment-.*"}[5m]) > 0
+          for: 1m
           labels:
             severity: warning
           annotations:
             summary: "Register App pod is restarting"
-            description: "Pod {{ $labels.pod }} has been restarting frequently."
-
-        # Alert when CPU usage is too high
-        - alert: RegisterAppHighCPU
-          expr: rate(container_cpu_usage_seconds_total{pod=~"register-app-deployment-.*"}[5m]) > 0.4
-          for: 5m
-          labels:
-            severity: warning
-          annotations:
-            summary: "Register App high CPU"
-            description: "Pod {{ $labels.pod }} CPU usage is above 80%."
+            description: "Pod {{ $labels.pod }} restarted in the last 5 minutes."
