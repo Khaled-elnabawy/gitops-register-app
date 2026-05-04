@@ -7,9 +7,9 @@ stringData:
   alertmanager.yaml: |
     global:
       smtp_smarthost: 'smtp.gmail.com:587'
-      smtp_from: 'khaledelnabawy457@gmail.com'
-      smtp_auth_username: 'khaledelnabawy457@gmail.com'
-      smtp_auth_password: 'password'
+      smtp_from: 'your-email@gmail.com'
+      smtp_auth_username: 'your-email@gmail.com'
+      smtp_auth_password: 'your-password'
       smtp_require_tls: true
 
     route:
@@ -18,5 +18,5 @@ stringData:
     receivers:
       - name: 'email-notifications'
         email_configs:
-          - to: 'khaledelnabawy457@gmail.com'
+          - to: 'receiver-email@gmail.com'
             send_resolved: true
