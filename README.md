@@ -62,7 +62,7 @@ Implements a GitOps workflow where ArgoCD continuously monitors this repository 
 
 ## 🔗 Application Repo
 
-👉 https://github.com/YOUR_USERNAME/end-to-end-ci-cd-pipeline
+👉 https://github.com/Khaled-elnabawy/end-to-end-ci-cd-pipeline
 
 ---
 
